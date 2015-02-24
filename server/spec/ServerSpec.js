@@ -94,9 +94,9 @@ it('Should respond with messages that were previously posted', function() {
     res = new stubs.response();
 
     handler.requestHandler(req, res);
-
     expect(res._responseCode).to.equal(200);
     var messages = JSON.parse(res._data).results;
+    console.log(JSON.parse(res._data));
     expect(messages.length).to.be.above(0);
     expect(messages[0].username).to.equal('Jono');
     expect(messages[0].message).to.equal('Do my bidding!');

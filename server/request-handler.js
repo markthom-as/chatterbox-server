@@ -60,6 +60,7 @@ this file and include it in basic-server.js so that it actually works.
   if(request.method === "POST"){
     request.on('data', function(chunk){
       chunk = JSON.parse(chunk);
+      chunk.room = chunk.room || request.url.slice(9);
       if (request.url){
         chunk.objectID = messages.length;
         messages.results.push(chunk);
