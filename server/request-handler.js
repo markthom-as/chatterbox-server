@@ -1,3 +1,6 @@
+var path = require('path');
+var fs = require('fs');
+
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -12,7 +15,9 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
   var messages = {
-    results : []
+    results : [
+      {text: "LOL", room: 'lobby'}
+    ]
     // lobby : []
   };
 
@@ -32,6 +37,30 @@ this file and include it in basic-server.js so that it actually works.
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
+
+  var content = ''
+  var fileName = path.basename(request.url);
+
+  if((request.url.split("/").length -1) > 1){
+    fileName = request.url;
+  }
+  localFolder = __dirname + '/../client/';
+
+  if(fileName === 'index.html' || fileName.indexOf('.') !== -1){
+    content = localFolder + fileName;
+    fs.readFile(content, function(err, contents){
+      if(!err){
+        var headers = defaultCorsHeaders;
+        headers['Content-Type'] = "text/html";
+        var statusCode = 200;
+        response.writeHead(statusCode, headers);
+        console.log(contents);
+        response.end(contents);
+      }else{
+        console.dir(err);
+      }
+    })
+  }else{
 
   // The outgoing status.
   var statusCode = 200;
@@ -88,6 +117,7 @@ this file and include it in basic-server.js so that it actually works.
 
   response.writeHead(statusCode, headers);
   response.end(JSON.stringify({results: responseArray}));
+}
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
